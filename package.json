@@ -1,0 +1,27 @@
+{
+  "name": "nc",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build-parser": "nearleyc src/grammar.ne -o src/grammar.js",
+    "start": "node src/server.js",
+    "dev": "npm run build-parser & nodemon src/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "code":"uglifyjs code.js -o code.js & node code.js "
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "moo": "^0.5.1",
+    "mz": "^2.7.0",
+    "nearley": "^2.20.1",
+    "nearly": "^1.8.1"
+  },
+  "devDependencies": {
+    "minify": "^8.0.3"
+  }
+}

@@ -119,6 +119,23 @@ function  generateJSForEachStatementOrExpression(line) {
         } `
         return js
     }
+    else if(line.type === "do_while_statement"){
+        let bodyStatements = `\n`
+        line.body[0].forEach((statement) =>{
+            bodyStatements += generateJSForEachStatementOrExpression(statement) + "\n"
+        })
+       
+     
+        const leftValue = line.condition.left.value
+        const rightValue = line.condition.right.value
+        const operator = line.condition.operator.value
+        const js = `
+        do{
+            ${bodyStatements}
+
+        }while(${leftValue}${operator}${rightValue})`
+        return js
+    }
     else if(line.type === "arrow_function"){
         let arrowFunctionStatements = `\n`
         line.body[0].forEach((bodyStatement) =>{

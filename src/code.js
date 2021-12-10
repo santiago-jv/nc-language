@@ -1,10 +1,19 @@
-var xd = 2
-var no = () =>{
-ncOut("xddd")
+var i = 1
 
-}
-no()
-ncOut(xd)
+        do{
+            
+ i = sum(i, 1)
+ncOut(i)
+
+
+        }while(i>10)
+if(2>1){
+            
+ncOut("xd")
+
+        }
+            undefined
+        
 function ncOut(...args) {
     console.log(...args);
 }

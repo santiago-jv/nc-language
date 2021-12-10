@@ -12,10 +12,10 @@ statements ->
             return [data[2]]
         }
     %}
-    | statements new_line:+ _ statement _
+    | new_line:* statements new_line:+ _ statement _
      {%
         (data)=>{
-            return [...data[0],data[3]]
+            return [...data[1],data[4]]
         }
     %}
 
@@ -25,6 +25,7 @@ statement
     | var_reassign {% id %}
     | if_statement {% id %}
     | while_statement {% id %}
+    |do_while_statement {% id %}
     | function_call {% id %}
 
 
@@ -162,6 +163,16 @@ if_statement
                 alternate: data[11]
             })
         %}
+
+do_while_statement ->
+    "ncDo" _ code_block _ new_line:? "ncWhile" _ %lparen _ comparison_expression _ %rparen
+            {%
+                data => ({
+                    type: "do_while_statement",
+                    condition: data[9],
+                    body: data[2]
+                })
+            %}
 
 while_statement
     -> "ncWhile" _ %lparen _ comparison_expression _ %rparen _ code_block

@@ -14,11 +14,13 @@ var grammar = {
             return [data[2]]
         }
             },
-    {"name": "statements$ebnf$2", "symbols": ["new_line"]},
+    {"name": "statements$ebnf$2", "symbols": []},
     {"name": "statements$ebnf$2", "symbols": ["statements$ebnf$2", "new_line"], "postprocess": function arrpush(d) {return d[0].concat([d[1]]);}},
-    {"name": "statements", "symbols": ["statements", "statements$ebnf$2", "_", "statement", "_"], "postprocess": 
+    {"name": "statements$ebnf$3", "symbols": ["new_line"]},
+    {"name": "statements$ebnf$3", "symbols": ["statements$ebnf$3", "new_line"], "postprocess": function arrpush(d) {return d[0].concat([d[1]]);}},
+    {"name": "statements", "symbols": ["statements$ebnf$2", "statements", "statements$ebnf$3", "_", "statement", "_"], "postprocess": 
         (data)=>{
-            return [...data[0],data[3]]
+            return [...data[1],data[4]]
         }
             },
     {"name": "statement", "symbols": [(lexer.has("NL") ? {type: "NL"} : NL)], "postprocess": id},
@@ -26,6 +28,7 @@ var grammar = {
     {"name": "statement", "symbols": ["var_reassign"], "postprocess": id},
     {"name": "statement", "symbols": ["if_statement"], "postprocess": id},
     {"name": "statement", "symbols": ["while_statement"], "postprocess": id},
+    {"name": "statement", "symbols": ["do_while_statement"], "postprocess": id},
     {"name": "statement", "symbols": ["function_call"], "postprocess": id},
     {"name": "var_assign", "symbols": [(lexer.has("identifier") ? {type: "identifier"} : identifier), "_", (lexer.has("assign") ? {type: "assign"} : assign), "_", "expression", "_"], "postprocess":  
         (data)=>{
@@ -131,6 +134,15 @@ var grammar = {
             alternate: data[11]
         })
                 },
+    {"name": "do_while_statement$ebnf$1", "symbols": ["new_line"], "postprocess": id},
+    {"name": "do_while_statement$ebnf$1", "symbols": [], "postprocess": function(d) {return null;}},
+    {"name": "do_while_statement", "symbols": [{"literal":"ncDo"}, "_", "code_block", "_", "do_while_statement$ebnf$1", {"literal":"ncWhile"}, "_", (lexer.has("lparen") ? {type: "lparen"} : lparen), "_", "comparison_expression", "_", (lexer.has("rparen") ? {type: "rparen"} : rparen)], "postprocess": 
+        data => ({
+            type: "do_while_statement",
+            condition: data[9],
+            body: data[2]
+        })
+                    },
     {"name": "while_statement", "symbols": [{"literal":"ncWhile"}, "_", (lexer.has("lparen") ? {type: "lparen"} : lparen), "_", "comparison_expression", "_", (lexer.has("rparen") ? {type: "rparen"} : rparen), "_", "code_block"], "postprocess": 
         data => ({
             type: "while_statement",

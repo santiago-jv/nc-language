@@ -22,6 +22,11 @@ let lexer = moo.compile({
 	reassign:'-:',
 	coma:',',
 	arrowSymbol:':->',
+	equal:':',
+	semicolon: ';',
+	step: 'step',
+	plus: '+',
+	minus: '-',
 	NL: { match: /\n/, lineBreaks: true },
 })
 

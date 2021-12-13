@@ -29,6 +29,7 @@ var grammar = {
     {"name": "statement", "symbols": ["if_statement"], "postprocess": id},
     {"name": "statement", "symbols": ["while_statement"], "postprocess": id},
     {"name": "statement", "symbols": ["do_while_statement"], "postprocess": id},
+    {"name": "statement", "symbols": ["for_statement"], "postprocess": id},
     {"name": "statement", "symbols": ["function_call"], "postprocess": id},
     {"name": "var_assign", "symbols": [(lexer.has("identifier") ? {type: "identifier"} : identifier), "_", (lexer.has("assign") ? {type: "assign"} : assign), "_", "expression", "_"], "postprocess":  
         (data)=>{
@@ -148,6 +149,19 @@ var grammar = {
             type: "while_statement",
             condition: data[4],
             body: data[8]
+        })
+                },
+    {"name": "for_statement$subexpression$1", "symbols": [{"literal":"+"}]},
+    {"name": "for_statement$subexpression$1", "symbols": [{"literal":"-"}]},
+    {"name": "for_statement", "symbols": [{"literal":"ncFor"}, "_", (lexer.has("lparen") ? {type: "lparen"} : lparen), "_", (lexer.has("identifier") ? {type: "identifier"} : identifier), "_", {"literal":":"}, "_", (lexer.has("number") ? {type: "number"} : number), "_", {"literal":";"}, "_", "comparison_expression", "_", {"literal":";"}, "_", {"literal":"step"}, "_", "for_statement$subexpression$1", "_", (lexer.has("number") ? {type: "number"} : number), "_", (lexer.has("rparen") ? {type: "rparen"} : rparen), "_", "code_block"], "postprocess": 
+        data=>({
+            type: "for_statement",
+            identifier: data[4],
+            identifier_value: data[8],
+            condition: data[12],
+            step: data[18][0],
+            step_value: data[20],
+            body: data[24]
         })
                 },
     {"name": "code_block", "symbols": ["body_function"], "postprocess": 

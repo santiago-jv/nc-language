@@ -149,6 +149,24 @@ function  generateJSForEachStatementOrExpression(line) {
         arrowFunctionStatements 
         const js = `(${arrowFunctionParameters}) =>{${arrowFunctionStatements + "\n"}}`   
         return js
+    }else if(line.type === "for_statement"){
+        let bodyStatements = `\n`
+        line.body[0].forEach((statement) =>{
+            bodyStatements += generateJSForEachStatementOrExpression(statement) + "\n"
+        })
+
+
+        const leftValue = line.condition.left.value
+        const rightValue = line.condition.right.value
+        const operator = line.condition.operator.value
+        const identifierName = line.identifier.value
+        const identifierValue = line.identifier_value.value
+        const step = line.step.value
+        const stepValue = line.step_value.value
+        const js = `for(var ${identifierName}=${identifierValue} ; ${leftValue}${operator}${rightValue}; ${identifierName} = ${identifierName} ${step} ${stepValue}  ){
+            ${bodyStatements}
+        } `
+        return js
     }
     else{
         throw new Error("Invalid statements")

@@ -25,7 +25,8 @@ statement
     | var_reassign {% id %}
     | if_statement {% id %}
     | while_statement {% id %}
-    |do_while_statement {% id %}
+    | do_while_statement {% id %}
+    | for_statement {% id %}
     | function_call {% id %}
 
 
@@ -184,7 +185,19 @@ while_statement
             })
         %}
 
-            
+for_statement
+    -> "ncFor" _ %lparen _ %identifier _ ":" _  %number _ ";" _ comparison_expression _ ";" _ "step"  _ ("+" | "-") _ %number _ %rparen _ code_block
+        {%
+            data=>({
+                type: "for_statement",
+                identifier: data[4],
+                identifier_value: data[8],
+                condition: data[12],
+                step: data[18][0],
+                step_value: data[20],
+                body: data[24]
+            })
+        %}
 code_block -> body_function
     {%
         id
